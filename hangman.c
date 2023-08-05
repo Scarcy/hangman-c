@@ -3,6 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifdef __APPLE__
+#include <stdlib.h>
+#define randomInt(n) (arc4random_uniform((n)))
+#else
+#define randomInt(n) (rand() % (n))
+#endif
+
 char *initBoard(char *puzzleState, char *randomWord) {
   printf("Welcome to Hangman!\n");
   printf("Guess a letter\n");
@@ -17,8 +24,9 @@ char *initBoard(char *puzzleState, char *randomWord) {
 
 char *getRandomWord(char **words, int wordCount) {
 
-  int randomIndex = rand() % wordCount;
-
+  int randomIndex = randomInt(wordCount);
+  // int randomIndex = random() % wordCount;
+  // printf("Random index: %d\n", randomIndex);
   return words[randomIndex];
 }
 bool checkAnswer(char guess, char *word, char *puzzleState, int *correctCount) {
@@ -51,7 +59,7 @@ void finishGame(bool result, char *word) {
   }
 }
 int main() {
-  char *words[8];
+  char *words[7];
   char guessedChar;
   int failCount = 0;
   int *correctCount = malloc(sizeof(int));
@@ -64,7 +72,8 @@ int main() {
   words[4] = "langrenn";
   words[5] = "mikrofon";
   words[6] = "tastatur";
-  srand(time(0));
+  time_t seed = 1234;
+  srand(time(&seed));
   char *randomWord = getRandomWord(words, 7);
   char *puzzleState = malloc((strlen(randomWord) + 1) * sizeof(char));
   if (!puzzleState) {
