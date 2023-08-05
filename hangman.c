@@ -72,8 +72,7 @@ int main() {
   words[4] = "langrenn";
   words[5] = "mikrofon";
   words[6] = "tastatur";
-  time_t seed = 1234;
-  srand(time(&seed));
+  srand(time(NULL));
   char *randomWord = getRandomWord(words, 7);
   char *puzzleState = malloc((strlen(randomWord) + 1) * sizeof(char));
   if (!puzzleState) {
